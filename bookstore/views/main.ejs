@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookStore co.</title>
+    <link rel="stylesheet" href="/assets/main.css">
+</head>
+<body>
+    <nav>
+        <h3>BookStore</h3>
+        <ul class="navList">
+            <li>Home</li>
+            <li>About</li>
+            <li>More</li>
+        </ul>
+    </nav>
+
+    <!-- Book details section  -->
+    <form class="bookForm" method="post" action="/addData" enctype="multipart/form-data">
+        <fieldset class="formFieldset">
+            <legend class="formLegend">Enter Book Details</legend>
+            
+            <label for="bookName" class="formLabel">Name of the Book:</label>
+            <input type="text" id="bookName" name="bookName" class="formInput"><br><br>
+            
+            <label for="author" class="formLabel">Author of the Book:</label>
+            <input type="text" id="author" name="author" class="formInput"><br><br>
+            
+            <label for="publishedYear" class="formLabel">Published Year:</label>
+            <input type="number" id="publishedYear" name="publishedYear" class="formInput"><br><br>
+            
+            <label for="genre" class="formLabel">Genre:</label>
+            <input type="text" id="genre" name="genre" class="formInput"><br><br>
+            
+            <label for="bookImage" class="formLabel">Upload an Image:</label>
+            <input type="file" id="bookImage" name="bookImage" class="formInput"><br><br>
+            
+            <input type="submit" value="Submit" class="submitButton">
+        </fieldset>
+    </form>
+    
+    <table class="bookTable">
+        <caption class="tableCaption">Details of the Books</caption>
+        <thead>
+            <tr>
+                <th class="tableHeader">Name of the Book</th>
+                <th class="tableHeader">Author</th>
+                <th class="tableHeader">Published Year</th>
+                <th class="tableHeader">Genre</th>
+                <th class="tableHeader">Image</th>
+                <th class="tableHeader">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% books.forEach(book => { %>
+                <tr>
+                    <td class="tableData"><%= book.bookName %></td>
+                    <td class="tableData"><%= book.autherName %></td>
+                    <td class="tableData"><%= book.year %></td>
+                    <td class="tableData"><%= book.genre %></td>
+                    <td class="tableData">
+                        <% if (book.image) { %>
+                            <img src="<%= book.image %>" alt="Book Image" class="bookImage" />
+                        <% } else { %>
+                            No image
+                        <% } %>
+                    </td>
+                    <td class="tableAction">
+                        <a href="/deleteBook/<%= book._id %>">
+                            <button class="deleteButton">Delete</button>
+                        </a> 
+                        <a href="/editBook/<%= book._id %>">
+                            <button class="editButton">Edit</button>
+                        </a> 
+                    </td>                    
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    
+</body>
+</html>

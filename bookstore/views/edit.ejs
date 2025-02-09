@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Book</title>
+</head>
+<body>
+    <h1>Edit Book</h1>
+
+    <!-- Edit Form -->
+    <form action="/updateBook/<%= book._id %>" method="post" enctype="multipart/form-data">
+        <label for="bookName">Book Name:</label>
+        <input type="text" name="bookName" value="<%= book.bookName %>" required><br><br>
+
+        <label for="author">Author Name:</label>
+        <input type="text" name="author" value="<%= book.autherName %>" required><br><br>
+
+        <label for="publishedYear">Published Year:</label>
+        <input type="number" name="publishedYear" value="<%= book.year %>" required><br><br>
+
+        <label for="genre">Genre:</label>
+        <input type="text" name="genre" value="<%= book.genre %>" required><br><br>
+
+        <label for="bookImage">Upload New Image:</label>
+        <input type="file" name="bookImage"><br><br>
+            <button type="submit" value="Update Book">submit</button>
+    </form>
+</body>
+</html>
