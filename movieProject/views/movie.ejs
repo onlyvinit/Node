@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Co.</title>
+    <link rel="stylesheet" href="/assets/movie.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <nav>
+        <ul class="navOne">
+            <li class="brand">
+                <h3>bookmyShow</h3>
+            </li>
+            <li class="search">
+                <input type="text" placeholder="Search Movies" id="search">
+            </li>
+        </ul>
+        <ul class="navTwo">
+            <li class="cities">
+                <select name="cities" id="cities">
+                    <option value="new-york">Select the City</option>
+                    <option value="los-angeles">Ahmedabad</option>
+                    <option value="chicago">Vadodra</option>
+                    <option value="san-francisco">Mumbai</option>
+                    <option value="miami">Delhi</option>
+                </select>
+            </li>
+            <li class="signin">
+                <button class="btn-signin">Sign in</button>
+            </li>
+            <li class="icon">
+                <i class="fas fa-bars"></i>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Sign In Section  -->
+    <section class="signin-form">
+        <div class="signin-content">
+            <h3>Sign In</h3>
+            <form action="/" method="post" enctype="multipart/form-data">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="userName">
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+
+                <button type="submit">Sign In</button>
+                <a href="/createUser">
+                    <button type="button" id="create-user">Create New User</button>
+                </a>
+            </form>
+            <button type="button" class="close-btn" id="close-signin">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </section>
+
+    <main>
+        <section class="carousel">
+            <div class="carousel-items">
+                <h3>Movies</h3>
+                <p>Book your Movies and enjoy the shows</p>
+            </div>
+            <div class="carousel-items">
+                <h3>Shows</h3>
+                <p>Enjoy your pre-booking and have fun!</p>
+            </div>
+            <div class="carousel-items">
+                <h3>Stand-Up Art</h3>
+                <p>Watch Stand-up comedy and more</p>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="carousel-buttons">
+                <button id="prev-btn">❮</button>
+                <button id="next-btn">❯</button>
+            </div>
+        </section>
+        <section class="movie-list">
+            <h2>Movies List</h2>
+        </section>
+
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h4>About Us</h4>
+                    <p>BookMyShow is your one-stop platform for booking tickets for movies, shows, and events. We strive to provide seamless booking experiences and entertainment for all movie lovers.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/movies">Movies</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="/about">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-social">
+                    <h4>Follow Us</h4>
+                    <ul>
+                        <li><a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+                        <li><a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p>Email: support@bookmyshow.com</p>
+                    <p>Phone: +1-800-123-4567</p>
+                </div>
+            </div>
+        
+            <div class="footer-bottom">
+                <p>&copy; 2025 BookMyShow. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </main>
+
+
+
+    <script>
+
+        // carousal
+
+        let currentIndex = 0;
+        const carouselItems = document.querySelectorAll('.carousel-items');
+        const totalItems = carouselItems.length;
+
+        function updateCarousel() {
+            const offset = -100 * currentIndex;
+            carouselItems.forEach(item => {
+                item.style.transform = `translateX(${offset}%)`;
+            });
+        }
+
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+        }
+
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateCarousel();
+        }
+
+
+        setInterval(nextSlide, 5000);
+
+        document.getElementById('next-btn').addEventListener('click', nextSlide);
+        document.getElementById('prev-btn').addEventListener('click', prevSlide);
+
+        updateCarousel();
+
+        // signIn functionality 
+
+        const signinButton = document.querySelector('.btn-signin');
+        const signinForm = document.querySelector('.signin-form');
+        const closeSigninButton = document.getElementById('close-signin');
+        const createUserButton = document.getElementById('create-user');
+
+
+        signinButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            signinForm.style.display = 'flex';
+        });
+
+
+        closeSigninButton.addEventListener('click', function () {
+            signinForm.style.display = 'none';
+        });
+
+        //  display movies
+
+        async function fetchMovies() {
+            try {
+                const response = await fetch('/movies');
+                const movies = await response.json();
+
+                const movieList = document.querySelector('.movie-list');
+                const movieContainer = document.createElement('div');
+                movieContainer.classList.add('movies-container');
+
+                movies.forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.classList.add('movie-card');
+                    movieCard.innerHTML = `
+                <img src="${movie.picture}" alt="${movie.title}" width="100">
+                <h3>${movie.title}</h3>
+                <p><strong>Genre:</strong> ${movie.genre}</p>
+                <p><strong>Description:</strong> ${movie.description}</p>
+                <p><strong>Release Date:</strong> ${movie.releaseDate}</p>
+            `;
+                    movieContainer.appendChild(movieCard);
+                });
+                movieList.appendChild(movieContainer);
+
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+            }
+        }
+
+        fetchMovies();
+
+    </script>
+
+</body>
+
+</html>

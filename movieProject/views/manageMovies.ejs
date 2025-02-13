@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Manage - Admin Panel</title>
+    <link rel="stylesheet" href="/assets/manageMovies.css">
+</head>
+
+<body>
+    <h1>Manage Movies</h1>
+    <main>
+        <div class="btngroup">
+            <button class="showbtn">Add Movies</button>
+            <button class="deleteMovies">Delete Movies</button>
+            <button class="editMovies">Edit Movies</button>
+        </div>
+        
+        <!-- add movie section  -->
+
+        <section class="add-movies">
+            <h2>Add Movie</h2>
+            <form action="/addMovie" method="POST" enctype="multipart/form-data">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="genre">Genre:</label>
+                <input type="text" id="genre" name="genre" required>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+
+                <label for="releaseDate">Release Date:</label>
+                <input type="date" id="releaseDate" name="releaseDate" required>
+
+                <label for="image">Movie Image:</label>
+                <input type="file" id="image" name="picture" accept="image/*">
+
+                <button type="submit">Add Movie</button>
+            </form>
+        </section>
+
+        <!-- movie secton  -->
+
+        <section class="showMovies">
+            <h2>Movies List</h2>
+            <div class="movies-list">
+                <% if (typeof movies !== 'undefined' && movies.length > 0) { %>
+                    <% movies.forEach(movie => { %>
+                        <div class="movie-card">
+                            <input type="checkbox" name="movieSelect" value="<%= movie._id %>" class="movie-checkbox">
+                            <h3><%= movie.title %></h3>
+                            <p><strong>Genre:</strong> <%= movie.genre %></p>
+                            <p><strong>Description:</strong> <%= movie.description %></p>
+                            <p><strong>Release Date:</strong> <%= movie.releaseDate %></p>
+                            <img src="<%= movie.picture %>" alt="<%= movie.title %>" class="movie-image">
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No movies available.</p>
+                <% } %>
+            </div>
+        </section>
+
+        <!-- Edit Movie -->
+        <section class="edit-movie-form" style="display: none;">
+            <h2>Edit Movie</h2>
+            <form id="editMovieForm" action="/editMovie" method="POST" enctype="multipart/form-data">
+                <input type="hidden" id="movieId" name="movieId">
+                
+                <label for="editTitle">Title:</label>
+                <input type="text" id="editTitle" name="title" required>
+
+                <label for="editGenre">Genre:</label>
+                <input type="text" id="editGenre" name="genre" required>
+
+                <label for="editDescription">Description:</label>
+                <textarea id="editDescription" name="description" required></textarea>
+
+                <label for="editReleaseDate">Release Date:</label>
+                <input type="date" id="editReleaseDate" name="releaseDate" required>
+
+                <label for="editImage">Movie Image:</label>
+                <input type="file" id="editImage" name="picture" accept="image/*">
+
+                <button type="submit">Save Changes</button>
+                <button type="button" class="close-edit-form">Cancel</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Add movie button functionality
+        const showBtn = document.querySelector('.showbtn');
+        const movieForm = document.querySelector('.add-movies');
+        movieForm.style.display = 'none';
+
+        showBtn.addEventListener('click', () => {
+            movieForm.style.display = 'block';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target !== movieForm && e.target !== showBtn && !movieForm.contains(e.target)) {
+                movieForm.style.display = 'none';
+            }
+        });
+
+        // Delete movie functionality
+        const deleteButton = document.querySelector('.deleteMovies');
+
+        deleteButton.addEventListener('click', async () => {
+            const selectedMovies = document.querySelectorAll('input[name="movieSelect"]:checked');
+            const movieIds = [];
+            
+            selectedMovies.forEach(movie => {
+                movieIds.push(movie.value); 
+            });
+
+            if (movieIds.length > 0) {
+                try {
+                    const response = await fetch('/deleteMovies', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ movieIds }), 
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Movies deleted successfully!');
+                        location.reload();
+                    } else {
+                        alert('Failed to delete movies.');
+                    }
+                } catch (error) {
+                    console.error('Error deleting movies:', error);
+                }
+            } else {
+                alert('Please select at least one movie to delete.');
+            }
+        });
+
+        // Edit movie functionality
+        const editButton = document.querySelector('.editMovies');
+        const editForm = document.querySelector('.edit-movie-form');
+        const closeEditFormButton = document.querySelector('.close-edit-form');
+
+        editButton.addEventListener('click', () => {
+            const selectedMovies = document.querySelectorAll('input[name="movieSelect"]:checked');
+            if (selectedMovies.length === 1) {
+                const selectedMovieId = selectedMovies[0].value;
+                const movieCard = selectedMovies[0].closest('.movie-card');
+                
+                fetch(`/movie/${selectedMovieId}`)
+                    .then(response => response.json())
+                    .then(movie => {
+                        document.getElementById('movieId').value = movie._id;
+                        document.getElementById('editTitle').value = movie.title;
+                        document.getElementById('editGenre').value = movie.genre;
+                        document.getElementById('editDescription').value = movie.description;
+                        document.getElementById('editReleaseDate').value = movie.releaseDate;
+                        editForm.style.display = 'block';
+                    })
+                    .catch(error => console.error('Error fetching movie details:', error));
+            } else {
+                alert('Please select only one movie to edit.');
+            }
+        });
+
+        closeEditFormButton.addEventListener('click', () => {
+            editForm.style.display = 'none';
+        });
+
+        // Submit edited movie button details
+        const editMovieForm = document.getElementById('editMovieForm');
+
+        editMovieForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(editMovieForm);
+
+            try {
+                const response = await fetch('/editMovie', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('Movie updated successfully!');
+                    location.reload(); 
+                } else {
+                    alert('Failed to update the movie.');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    </script>
+</body>
+
+</html>

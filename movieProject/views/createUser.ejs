@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <link rel="stylesheet" href="/assets/createUser.css">
+</head>
+<body>
+    <form action="/createData" method="post" enctype="multipart/form-data">
+        <h1>Create User</h1>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="userName" placeholder="Enter your username" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+        <label for="image">Profile Picture:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+
+        <!-- Submit Button -->
+        <button type="submit">Create Account</button>
+    </form>
+</body>
+</html>
