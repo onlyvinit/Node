@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/assets/products.css">
+</head>
+
+<body>
+
+    <!-- Button Group -->
+    <div id="btnGroup">
+        <button id="toggleForm"><i class="fa-solid fa-plus"></i></button>
+        <button id="deleteProduct"><i class="fa-solid fa-trash"></i></button>
+        <button id="editProduct"><i class="fa-solid fa-pen"></i></button>
+    </div>
+
+    <!-- Add Product Form -->
+    <form id="productForm" action="/addProduct" method="POST" enctype="multipart/form-data" style="display: none;">
+        <label for="name">Product Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required>
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required>
+
+        <label for="picture">Upload Picture:</label>
+        <input type="file" id="picture" name="picture" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+
+    <!-- Product List -->
+    <h2>Product List</h2>
+    <div id="productList">
+        <% if (products && products.length> 0) { %>
+            <% products.forEach(product=> { %>
+                <div class="product-card">
+                    <input type="checkbox" class="product-checkbox" value="<%= product._id %>">
+                    <img src="/uploads/<%= product.picture %>" alt="Product Image">
+                    <h3>
+                        <%= product.name %>
+                    </h3>
+                    <p>
+                        <%= product.description %>
+                    </p>
+                    <p class="product-price">$<%= product.price %>
+                    </p>
+                    <p><strong>Category:</strong>
+                        <%= product.category %>
+                    </p>
+                </div>
+                <% }) %>
+                    <% } else { %>
+                        <p>No products available.</p>
+                        <% } %>
+    </div>
+
+    <!-- Edit Product Form -->
+    <div id="editFormContainer" style="display: none;">
+        <form action="/editProduct" id="editForm" method="POST" enctype="multipart/form-data">
+            <h2>Edit Product</h2>
+            
+            <input type="hidden" id="editProductId" name="productId">
+            
+            <label for="editName">Product Name:</label>
+            <input type="text" id="editName" name="name" required>
+        
+            <label for="editDescription">Description:</label>
+            <textarea id="editDescription" name="description" required></textarea>
+        
+            <label for="editPrice">Price:</label>
+            <input type="number" id="editPrice" name="price" required>
+        
+            <label for="editCategory">Category:</label>
+            <input type="text" id="editCategory" name="category" required>
+        
+            <label for="editPicture">Product Image:</label>
+            <input type="file" id="editPicture" name="picture">
+        
+            <button type="submit">Update</button>
+            <button type="button" id="cancelEdit">Cancel</button>
+        </form>
+        
+    </div>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("productForm");
+            const toggleFormButton = document.getElementById("toggleForm");
+            const deleteBtn = document.getElementById("deleteProduct");
+            const editBtn = document.getElementById("editProduct");
+            const editFormContainer = document.getElementById("editFormContainer");
+            const editForm = document.getElementById("editForm");
+            const cancelEditBtn = document.getElementById("cancelEdit");
+    
+            // Toggle Product Form
+            toggleFormButton.addEventListener("click", () => {
+                form.style.display = form.style.display === "none" ? "block" : "none";
+            });
+    
+            // DELETE PRODUCT FUNCTIONALITY
+            deleteBtn.addEventListener("click", async () => {
+                const selectedProducts = Array.from(document.querySelectorAll(".product-checkbox:checked"))
+                    .map(checkbox => checkbox.value);
+    
+                if (selectedProducts.length === 0) {
+                    alert("Please select at least one product to delete.");
+                    return;
+                }
+    
+                const confirmDelete = confirm("Are you sure you want to delete the selected products?");
+                if (!confirmDelete) return;
+    
+                try {
+                    const response = await fetch("/deleteProduct", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ productIds: selectedProducts })
+                    });
+    
+                    if (response.ok) {
+                        alert("Products deleted successfully.");
+                        location.reload(); // Reload the page to update the list
+                    } else {
+                        alert("Error deleting products.");
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Error deleting products.");
+                }
+            });
+    
+            // EDIT PRODUCT FUNCTIONALITY
+            editBtn.addEventListener("click", async () => {
+                const selectedProducts = Array.from(document.querySelectorAll(".product-checkbox:checked"))
+                    .map(checkbox => checkbox.value);
+    
+                if (selectedProducts.length !== 1) {
+                    alert("Please select exactly one product to edit.");
+                    return;
+                }
+    
+                const productId = selectedProducts[0];
+    
+                try {
+                    const response = await fetch(`/getProduct/${productId}`);
+                    if (!response.ok) throw new Error("Failed to fetch product details");
+                    const product = await response.json();
+    
+                    // Populate the edit form with the product details
+                    document.getElementById("editProductId").value = product._id;
+                    document.getElementById("editName").value = product.name;
+                    document.getElementById("editDescription").value = product.description;
+                    document.getElementById("editPrice").value = product.price;
+                    document.getElementById("editCategory").value = product.category;
+    
+                    // Make the edit form visible
+                    editFormContainer.style.display = "flex";
+                } catch (error) {
+                    console.error("Error fetching product:", error);
+                    alert("Error loading product details.");
+                }
+            });
+    
+            // Handle edit form submission
+            editForm.addEventListener("submit", async (event) => {
+                event.preventDefault(); // Prevent default GET submission
+    
+                const productId = document.getElementById("editProductId").value;
+                const formData = new FormData(editForm);
+    
+                try {
+                    const response = await fetch(`/editProduct/${productId}`, {
+                        method: "POST",
+                        body: formData
+                    });
+    
+                    if (!response.ok) throw new Error("Failed to update product");
+    
+                    alert("Product updated successfully.");
+                    location.reload(); // Reload the page to show the updated product
+                } catch (error) {
+                    console.error("Error updating product:", error);
+                    alert("Failed to update product.");
+                }
+            });
+    
+            // Cancel button hides the edit form
+            cancelEditBtn.addEventListener("click", () => {
+                editFormContainer.style.display = "none";
+            });
+        });
+    </script>
+    
+</body>
+
+</html>

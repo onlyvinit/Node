@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Admin Panel</title>
+    <link rel="stylesheet" href="/assets/login.css">
+</head>
+
+<body>
+    <main>
+        <section class="login-section">
+            <h1>Login Page</h1>
+            <form action="/login" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account?<button class="signupButton">Create One !</button< /p>
+        </section>
+        <!-- Signup Section -->
+        <div class="signup-section">
+            <h1>Sign Up</h1>
+            <form action="/register" method="POST" enctype="multipart/form-data">
+                <label for="newUsername">Username:</label>
+                <input type="text" id="newUsername" name="username" required>
+
+                <label for="newPassword">Password:</label>
+                <input type="password" id="newPassword" name="password" required>
+
+                <label for="number">Phone Number:</label>
+                <input type="text" id="number" name="number" required>
+
+                <label for="image">Upload Profile Picture:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+
+                <button type="submit">Sign Up</button>
+            </form>
+            <p>Already have an account?
+                <button class="loginButton">Login</button>
+            </p>
+    </main>
+    </div>
+
+
+    <script>
+
+        // login and signup page functionality
+        document.addEventListener("DOMContentLoaded", function () {
+            const mainContainer = document.querySelector("main");
+            const signupButton = document.querySelector(".signupButton");
+            const loginButton = document.querySelector(".loginButton");
+
+            signupButton.addEventListener("click", function () {
+                mainContainer.classList.add("flipped");
+            });
+
+            loginButton.addEventListener("click", function () {
+                mainContainer.classList.remove("flipped");
+            });
+        });
+
+    </script>
+</body>
+
+</html>
