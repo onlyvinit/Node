@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- font awsome cdn  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- css  -->
+    <link rel="stylesheet" href="/assets/main.css">
+    <title>Main Page</title>
+</head>
+
+<body>
+    <nav>
+        <h2>Main Page</h2>
+        <ul>
+            <li>Home</li>
+            <li>About</li>
+            <li>
+                <i class="fa-solid fa-circle-user" onclick="toggleDropdown()"></i>
+            </li>
+        </ul>
+        <span class="dropMenu" id="userDropdown">
+            <p><strong><%= loggedUser.username %></strong></p>
+            <p><%= loggedUser.email %></p>
+            <form action="/logout" method="POST">
+                <button type="submit">Logout</button>
+            </form>            
+        </span>
+        
+    </nav>
+    <main>
+        <button id="userDisplay"><i class="fa-regular fa-user"></i></button>
+        <section id="sectionOne">
+            <fieldset>
+                <legend>User Information</legend>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Profile Image</th>
+                            <th colspan="2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% allUsers.forEach(user=> { %>
+                            <tr>
+                                <td>
+                                    <%= user.username %>
+                                </td>
+                                <td>
+                                    <%= user.email %>
+                                </td>
+                                <td>
+                                    <% if (user.profileImage) { %>
+                                        <img src="/uploads/<%= user.profileImage %>" style="border-radius: 50%;"
+                                            width="50" height="50" alt="Profile">
+                                        <% } else { %>
+                                            No Image
+                                            <% } %>
+                                </td>
+                                <td>
+                                    <button onclick="editUser('<%= user._id %>')">Edit</button>
+                                </td>
+                                <td>
+                                    <button onclick="deleteUser('<%= user._id %>')">Delete</button>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+
+
+                </table>
+            </fieldset>
+        </section>
+        <section id="sectionTwo">
+            <h2>Welcome Aboard</h2>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>BrandName</h2>
+                <p>Your tagline goes here.</p>
+            </div>
+
+            <div class="footer-links">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-social">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 BrandName. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <script>
+        function toggleDropdown() {
+            document.getElementById("userDropdown").classList.toggle("show");
+        }
+
+        const displaybtn = document.getElementById('userDisplay');
+        const sectionOne = document.getElementById('sectionOne');
+
+        displaybtn.addEventListener('click', function () {
+            if (sectionOne.style.display === "none" || sectionOne.style.display === "") {
+                sectionOne.style.display = "block";
+            } else {
+                sectionOne.style.display = "none";
+            }
+        });
+
+    </script>
+</body>
+
+</html>

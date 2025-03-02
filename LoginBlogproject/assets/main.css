@@ -1,0 +1,347 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    background-color: #f4f7f6; /* Soft light background */
+}
+
+body {
+    padding: 2vh;
+    font-size: 16px;
+    color: #333;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e1e1e1;
+    padding: 1vh 2vh;
+    background-color: #1c2b38; /* Darker navigation bar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease-in-out;
+}
+
+nav:hover {
+    background-color: #2e3c4c; /* Slight hover effect on nav */
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    padding: 1.2vh;
+    color: #ffffff;
+    transition: color 0.3s ease-in-out, transform 0.3s ease;
+}
+nav h2{
+    color: #d1d1e0;
+}
+
+nav ul li:hover {
+    color: #e8c1a3; /* Light color on hover */
+    transform: translateY(-5px); /* Lift effect */
+    cursor: pointer;
+}
+
+.dropMenu {
+    display: none;
+    position: absolute;
+    right: 2vh;
+    top: 60px;
+    background: #ffffff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.dropMenu button{
+    margin: 1vh 0vh;
+    border: none;
+    border-radius: 10px;
+    background: #bbb;
+    font-size: medium;
+    padding: 1vh;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.dropMenu.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#sectionOne {
+    z-index: 10;
+    padding: 2vh;
+    position: fixed;
+    top: 9vh;
+    left: 20vh;
+    width: 75%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-20px);
+    opacity: 0;
+    animation: slideIn 0.5s forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+fieldset {
+    border-radius: 10px;
+    padding: 3vh;
+    background-color: #e9f0f3; /* Soft light blue background */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+legend {
+    font-size: 25pt;
+    color: #1c2b38; /* Darker color for titles */
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    margin-top: 1vh;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #6c757d;
+    color: #ffffff;
+    padding: 1.2vh;
+    text-align: left;
+}
+
+td {
+    padding: 2vh;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e1e1e1;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+td:hover {
+    background-color: #f2f2f2;
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+table button {
+    width: 84%;
+    padding: 1vh;
+    border: none;
+    font-size: 9pt;
+    border-radius: 10px;
+    color: #333;
+    font-weight: 500;
+    background-color: #d1d1e0; /* Light gray with purple tint */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+table button:hover {
+    background-color: #a8a8c2; /* Darker on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added shadow for pop-up effect */
+}
+
+tbody {
+    text-align: center;
+}
+
+#userDisplay {
+    cursor: pointer;
+    position: fixed;
+    z-index: 10;
+    border: 1px solid #e1e1e1;
+    border-radius: 50%;
+    bottom: 10vh;
+    right: 10vh;
+    height: 60px;
+    width: 60px;
+    font-size: larger;
+    color: #ffffff;
+    background-color: #f06d6d; /* Soft coral color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#userDisplay:hover {
+    background-color: #e05656; /* Darker on hover */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+}
+
+#userDisplay i {
+    transition: all 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+#userDisplay i:hover {
+    transform: scale(1.1); /* Rotate icon on hover */
+    color: #fff; /* Icon color change */
+}
+
+#sectionOne {
+    display: none;
+    opacity: 0;
+    animation: fadeIn 0.5s forwards;
+}
+#sectionTwo{
+height: 80vh;
+
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Add a unique hover effect to links or buttons inside tables */
+table a {
+    text-decoration: none;
+    color: #3a7ca5;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+table a:hover {
+    color: #e8c1a3;
+    text-shadow: 0 0 10px rgba(255, 105, 180, 0.7); /* Glowing effect */
+}
+
+
+
+/* General Footer Styling */
+footer {
+    background-color: #1c2b38; /* Dark background for contrast */
+    color: #fff;
+    padding: 5vh 2vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+
+.footer-logo h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #f06d6d; /* Accent color */
+    margin-bottom: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.footer-logo p {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #ccc;
+    transition: opacity 0.3s ease;
+}
+
+.footer-logo:hover h2 {
+    transform: scale(1.1); /* Slight scaling effect */
+}
+
+.footer-logo:hover p {
+    opacity: 0.8; /* Make text slightly transparent on hover */
+}
+
+/* Footer Links Styling */
+.footer-links ul {
+    list-style: none;
+    display: flex;
+    gap: 2vh;
+}
+
+.footer-links ul li {
+    font-size: 1.1rem;
+}
+
+.footer-links ul li a {
+    color: #ddd;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-links ul li a:hover {
+    color: #f06d6d;
+    transform: translateY(-3px); /* Slight lifting effect */
+}
+
+/* Social Media Icons */
+.footer-social {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-social a {
+    font-size: 2.5rem;
+    color: #ddd;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-social a:hover {
+    color: #f06d6d; /* Accent color on hover */
+    transform: scale(1.1); /* Slight scaling effect */
+}
+
+/* Footer Bottom Styling */
+.footer-bottom {
+    text-align: center;
+    margin-top: 3vh;
+    font-size: 0.9rem;
+    color: #bbb;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-bottom p {
+    margin-top: 1vh;
+    opacity: 0.7;
+}
+
+footer:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.1) 50%, rgba(0, 0, 0, 0.1) 50%);
+    z-index: 0;
+}
+
