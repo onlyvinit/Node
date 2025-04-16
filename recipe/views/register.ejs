@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/assets/register.css">
+    <title>Register</title>
+
+</head>
+
+<body>
+    <main>
+        <!-- Login Form -->
+        <div id="login" class="active">
+            <h2>Login</h2>
+            <form action="/login" method="POST">
+                <label>Email:</label>
+                <input type="email" name="email" required />
+
+                <label>Password:</label>
+                <input type="password" name="password" required />
+
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <button id="toSignUp">Sign Up</button></p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="sign-up">
+            <h2>Sign Up</h2>
+            <form action="/register" method="POST">
+                <label>Email:</label>
+                <input type="email" name="email" required />
+
+                <label>Password:</label>
+                <input type="password" name="password" required />
+
+                <label>Confirm Password:</label>
+                <input type="password" name="confirmPassword" required />
+
+                <label>Role:</label>
+                <select name="role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <button id="toLogin">Login</button></p>
+        </div>
+    </main>
+
+    <script>
+        // Toggle logic for switching between login and signup forms
+        const toSignUpBtn = document.getElementById('toSignUp');
+        const toLoginBtn = document.getElementById('toLogin');
+
+        const loginForm = document.getElementById('login');
+        const signUpForm = document.getElementById('sign-up');
+
+        // Show signup form and hide login form
+        toSignUpBtn.addEventListener('click', () => {
+            loginForm.classList.remove('active');
+            signUpForm.classList.add('active');
+        });
+
+        // Show login form and hide signup form
+        toLoginBtn.addEventListener('click', () => {
+            signUpForm.classList.remove('active');
+            loginForm.classList.add('active');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/assets/admin.css" />
+</head>
+
+<body>
+  <header>
+    <nav>
+      <h2>Admin Dashboard</h2>
+      <div>
+        <span>Welcome, <%= user.email %></span>
+        <form action="/logout" method="POST" style="display: inline;">
+          <button type="submit">Logout</button>
+        </form>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Manage Recipes Section -->
+    <section id="recipes">
+      <h3>Manage Recipes</h3>
+
+      <form action="/create-recipe" method="POST">
+        <input type="text" name="title" placeholder="Title" required />
+        <textarea name="description" placeholder="Description" required></textarea>
+        <input type="text" name="ingredients" placeholder="Ingredients (comma separated)" required />
+        <button type="submit">Create Recipe</button>
+      </form>
+
+      <ul>
+        <% allRecipes.forEach(recipe => { %>
+          <li>
+            <strong><%= recipe.title %></strong> - <%= recipe.description %>
+            <form action="/delete-recipe/<%= recipe._id %>" method="POST" style="display:inline;">
+              <button type="submit">Delete</button>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    </section>
+
+    <!-- Manage Users Section -->
+    <section id="users">
+      <h3>Manage Users</h3>
+      <ul>
+        <% allUsers.forEach(u => { %>
+          <li>
+            <%= u.email %>
+            <% if (u._id.toString() !== loggedInUserId.toString()) { %>
+              <form action="/delete-user/<%= u._id %>" method="POST" style="display:inline;">
+                <button type="submit">Delete</button>
+              </form>
+            <% } else { %>
+              <em>(You)</em>
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+    </section>
+
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="/assets/user.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <h2>User Dashboard</h2>
+      <div>
+        <span>Welcome, <%= user.email %></span>
+        <form action="/logout" method="POST">
+          <button type="submit">Logout</button>
+        </form>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="browse-recipes">
+      <h3>Available Recipes</h3>
+      <% if (allRecipes.length === 0) { %>
+        <p>No recipes found.</p>
+      <% } else { %>
+        <ul>
+          <% allRecipes.forEach(recipe => { %>
+            <li>
+              <strong><%= recipe.title %></strong> — <%= recipe.description %>
+              <br />
+              Ingredients: <%= recipe.ingredients.join(", ") %>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>
